@@ -48,7 +48,6 @@ def startContent(content_url):
 
     return content[0]
 
-
 def start():
     rep = urllib2.Request(base_url, headers=header)
     response = urllib2.urlopen(rep)
@@ -63,17 +62,25 @@ def start():
         history = History()
         history.title = item.get('title')
         history.url = item.get('href')
-        history.content = startContent(history.url)
+        # history.content = ''.join(startContent(history.url))
         # history.content = json.dumps(startContent(history.url), ensure_ascii=False)
         history_list.append(history)
 
     print('读取完成')
     print('-----------------')
 
+    str = startContent(history_list[2].url)
+    print type(str.contents[0].string)
+    history_list[2].content = str
     print history_list[2].content
-    print '------------------'
+    print '--------------------------'
     str = json.dumps(history_list[2], default=history_list[2].history2dict, ensure_ascii=False)
-    print(str)
+    print str
+
+    # print history_list[2].content
+    # print '------------------'
+    # str = json.dumps(history_list[2], default=history_list[2].history2dict, ensure_ascii=False)
+    # print(str)
 
     # content = startContent(history_list[2].url)
     # print content
