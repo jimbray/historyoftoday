@@ -1,5 +1,8 @@
 from flask import Flask
 
+from GetHistory import gethistory
+import json
+
 app = Flask(__name__)
 
 
@@ -33,6 +36,11 @@ def readFile(file_name):
         return 'Failed to read file.'
 
     return ''.join(json_line)
+
+@app.route("/today")
+def getToday():
+    json_str = gethistory.start()
+    return json_str
 
 if __name__ == '__main__':
     app.debug = True
