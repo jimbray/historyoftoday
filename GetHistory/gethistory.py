@@ -14,6 +14,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import json
 import sys
+import DatabaseManager
 
 header = {'User-Agent': 'your agent string',
        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -41,7 +42,10 @@ base_url = 'http://www.lssdjt.com/'
 def startContent(content_url):
     req = urllib2.Request(content_url, headers=header)
 
-    response = urllib2.urlopen(req)
+    try:
+        response = urllib2.urlopen(req)
+    except urllib2.URLError, e:
+        print e.reason
 
     soup = BeautifulSoup(response.read(), "html.parser")
 
@@ -74,6 +78,8 @@ def start():
     print('读取完成')
     print('-----------------')
 
+
+    DatabaseManager.insertHistoryList(history_list)
     # print type(history_list)
     # print json.dumps(history_list,ensure_ascii=False)
     return json.dumps(history_list,ensure_ascii=False)
