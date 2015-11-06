@@ -1,6 +1,7 @@
 from flask import Flask
 
 from GetHistory import gethistory
+from GetHistory import DatabaseManager
 import json
 
 app = Flask(__name__)
@@ -12,7 +13,8 @@ def hello_world():
 
 @app.route('/')
 def index():
-    return 'This is the index page.'
+    json_str = gethistory.start()
+    return 'This is the index page.And the history is Ready'
 
 @app.route('/user/<user_name>')
 def show_name(user_name):
@@ -39,8 +41,8 @@ def readFile(file_name):
 
 @app.route("/today")
 def getToday():
-    json_str = gethistory.start()
-    return json_str
+    history_list = DatabaseManager.getAllHistory()
+    return json.dumps(history_list,ensure_ascii=False)
 
 if __name__ == '__main__':
     app.debug = True

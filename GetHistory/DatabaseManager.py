@@ -48,7 +48,39 @@ def insertHistoryList(history_list):
     conn.close()
 
 
+def getAllHistory():
+    # 连接到SQLite数据库
+    # 数据库文件是test.db
+    # 如果文件不存在，会自动在当前目录创建:
+    conn = sqlite3.connect('database.db')
+    #将数据库编码修改为
+    conn.text_factory = str
 
+    #执行SQL，创建history表
+    create_history_table = '''CREATE TABLE IF NOT EXISTS history (title TEXT, url TEXT, content TEXT)'''
+    conn.execute(create_history_table)
+
+    #执行语句，获取数据
+    cursor = conn.execute("SELECT * FROM history")
+
+    history_list = []
+    for row in cursor:
+        history = {}
+        history['title'] = row[0]
+        history['url'] = row[1]
+        history['content'] = row[2]
+        history_list.append(history)
+
+    #关闭游标
+    cursor.close()
+
+    #提交事物
+    conn.commit()
+
+    #关闭连接
+    conn.close()
+
+    return history_list
 
 
 
